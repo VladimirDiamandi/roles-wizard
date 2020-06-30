@@ -18,10 +18,6 @@ export class AppService {
 
   }
 
-  getHello(): string {
-    return 'Hello World!';
-  }
-
   async seed() {
     await getConnection()
       .createQueryBuilder()

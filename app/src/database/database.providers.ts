@@ -8,11 +8,11 @@ export const databaseProviders = [
     provide: 'DATABASE_CONNECTION',
     useFactory: async () => await createConnection({
       type: 'mysql',
-      host: 'localhost',
+      host: config.get('DB_HOST'),
       port: 3306,
-      username: 'wizard',
-      password: 'password123',
-      database: 'wizard',
+      username: config.get('DB_USER'),
+      password: config.get('DB_PASSWORD'),
+      database: config.get('DB_NAME'),
       entities: [
           __dirname + '/../**/*.entity{.ts,.js}',
       ],

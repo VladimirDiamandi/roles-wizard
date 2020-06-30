@@ -27,8 +27,8 @@ services:
       - ./db-data:/var/lib/mysql
     networks:
       - app-network
-    ports:
-      - "3306:3306"
+    expose:
+      - "3306"
   
   adminer:
     image: adminer
