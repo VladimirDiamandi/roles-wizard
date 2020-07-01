@@ -1,17 +1,16 @@
 version: "3"
 services:
 
-  app:
+  api:
     build:
       context: .
-      dockerfile: Dockerfile
-    container_name: app
+      dockerfile: api.Dockerfile
     networks:
       - app-network
-    ports:
-      - "3005:3005"
+    expose:
+      - "3005"
     volumes:
-    - ./app:/home/app
+    - ./api:/home/api
     depends_on:
       - db
 
@@ -36,9 +35,34 @@ services:
       - 8080:8080
     networks:
       - app-network
+
+  front:
+    build:
+      context: .
+      dockerfile: front.Dockerfile
+    networks:
+      - app-network
+    expose:
+      - "3000"
+    volumes:
+    - ./front:/home/front
+
+  web:
+    image: nginx:mainline-alpine
+    ports:
+      - "88:80"
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+      
+    depends_on:
+      - api
+      - front
+    networks:
+      - app-network
     
 volumes:
   app: {}
+  front: {}
   db-data: {}
 
 networks:

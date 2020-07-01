@@ -5,7 +5,7 @@ import { User } from '../schemas/user.entity';
 import * as bcrypt from 'bcrypt';
 import { AuthService } from './auth.service';
 
-@Controller('login')
+@Controller('api/login')
 export class LoginController {
   constructor(
       private authService: AuthService,
