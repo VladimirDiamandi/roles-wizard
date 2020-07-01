@@ -2,7 +2,7 @@ import { Controller, Post, Delete, Get, SetMetadata, UseGuards} from '@nestjs/co
 
 import { RolesGuard } from '../guards/roles.guard';
 
-@Controller('posts')
+@Controller('api/posts')
 @UseGuards(RolesGuard)
 export class PostController {
   constructor() {
