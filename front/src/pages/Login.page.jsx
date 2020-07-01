@@ -2,6 +2,7 @@ import React from "react";
 import { Form, Input, Button, Spin, Space, Alert, Card } from 'antd';
 import { connect } from 'react-redux';
 import { login } from '../store/actions/auth.actions';
+import PropTypes from 'prop-types';
 
 const layout = {
   labelCol: { span: 8 },
@@ -66,7 +67,7 @@ const LoginPage = ({ login, hasErrored, isLoading }) => {
 const mapStateToProps = (state) => {
   return {
     hasErrored: state.loginHasError,
-    isLoading: state.loginIsLoading
+    isLoading: state.loginIsPending
   };
 };
 
@@ -74,6 +75,12 @@ const mapDispatchToProps = (dispatch) => {
   return {
       login: (data) => dispatch(login(data))
   };
+};
+
+LoginPage.propTypes = {
+  hasErrored: PropTypes.bool.isRequired,
+  isLoading: PropTypes.bool.isRequired,
+  login: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoginPage);

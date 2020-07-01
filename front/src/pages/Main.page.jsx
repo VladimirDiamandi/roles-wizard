@@ -2,6 +2,7 @@ import React from "react";
 import { Button, Card, Alert, Space, Spin } from 'antd';
 import { connect } from 'react-redux';
 import { editPost, readPost, deletePost } from '../store/actions/posts.actions';
+import PropTypes from 'prop-types';
 
 const MainPage = ({ editPost, successMessage, hasErrored, isLoading, deletePost, readPost  }) => {
   return (
@@ -37,6 +38,15 @@ const mapDispatchToProps = (dispatch) => {
     readPost: () => dispatch(readPost()),
     editPost: () => dispatch(editPost()),
   };
+};
+
+MainPage.propTypes = {
+  successMessage: PropTypes.string,
+  hasErrored: PropTypes.bool.isRequired,
+  isLoading: PropTypes.bool.isRequired,
+  deletePost: PropTypes.func.isRequired,
+  readPost: PropTypes.func.isRequired,
+  editPost: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainPage);
