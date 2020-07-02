@@ -1,4 +1,5 @@
-import axios from 'axios';
+import { gql } from 'apollo-boost';
+import { client } from '../../graphql/graphql.client';
 
 const apiUrl = '/api';
 
@@ -28,22 +29,37 @@ export function loginHasError(bool) {
 
 export function login(data) {
   return (dispatch) => {
+
     dispatch(loginIsLoading(true));
     dispatch(loginHasError(false));
-    axios.post(apiUrl + '/login', data)
-      .then(resp => {
-        if (resp.data && resp.data.token) {
-          const token = resp.data.token;
-          dispatch(loginSuccess(token));
-        } else {
-          dispatch(loginHasError(true));
+    const LoginMutation = gql`
+      mutation login($email: String!, $password: String!) {
+        login(email: $email, password: $password) {
+          message
+          token
+          error
         }
-      })
-      .catch(err => {
+      }
+    `;
+
+    client.mutate({
+      mutation: LoginMutation,
+      variables: { email: data.email, password: data.password }
+    }).then(resp => {
+      if (resp.data && resp.data.login && resp.data.login.token) {
+        const token = resp.data.login.token;
+        localStorage.setItem('token', token);
+        dispatch(loginSuccess(token));
+      } else {
         dispatch(loginHasError(true));
-      })
-      .finally(()=>{
-        dispatch(loginIsLoading(false));
-      });
+      }
+    })
+    .catch(err => {
+      console.log('ERROR', err);
+      dispatch(loginHasError(true));
+    })
+    .finally(()=>{
+      dispatch(loginIsLoading(false));
+    });
   };
 };

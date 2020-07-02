@@ -1,0 +1,23 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type LoginOut {
+  message: String
+  error: String
+  token: String
+}
+
+type PostsOut {
+  message: String!
+}
+
+type Query {
+  readPost: PostsOut!
+}
+
+type Mutation {
+  login(password: String!, email: String!): LoginOut!
+  editPost: PostsOut!
+  deletePost: PostsOut!
+}

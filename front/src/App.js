@@ -12,37 +12,41 @@ import PropTypes from 'prop-types';
 import "./App.css";
 import LoginPage from './pages/Login.page';
 import MainPage from './pages/Main.page';
+import { ApolloProvider } from '@apollo/react-hooks';
+import { client } from './graphql/graphql.client';
 
 const App = ({ isAuth }) => {
   return (
-    <Router>
-      <div>
-        <Switch>
-          <Route path="/login">
-            { isAuth ?
+    <ApolloProvider client={client}>
+      <Router>
+        <div>
+          <Switch>
+            <Route path="/login">
+              { isAuth ?
+                  <Redirect
+                    to={{
+                      pathname: "/",
+                    }}
+                  />
+                  :
+                  <LoginPage />
+              }
+            </Route>
+            <Route path="/">
+              { isAuth ?
+                <MainPage />
+                :
                 <Redirect
                   to={{
-                    pathname: "/",
+                    pathname: "/login",
                   }}
                 />
-                :
-                <LoginPage />
-            }
-          </Route>
-          <Route path="/">
-            { isAuth ?
-              <MainPage />
-              :
-              <Redirect
-                to={{
-                  pathname: "/login",
-                }}
-              />
-            }
-          </Route>
-        </Switch>
-      </div>
-    </Router>
+              }
+            </Route>
+          </Switch>
+        </div>
+      </Router>
+    </ApolloProvider>
   );
 };
 
