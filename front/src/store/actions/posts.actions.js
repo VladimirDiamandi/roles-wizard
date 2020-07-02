@@ -111,3 +111,35 @@ export const readPost = () => (dispatch, getState) => {
     dispatch(postIsLoading(false));
   });
 };
+
+export const createPost = (data) => (dispatch) => {
+  dispatch(postIsLoading(true));
+  dispatch(postHasError(false));
+  dispatch(postSuccess(null));
+  const postMutation = gql`
+      mutation createPost($text: String!) {
+        createPost(text: $text) {
+          id
+          message
+        }
+      }
+    `;
+
+  client.mutate({
+    mutation: postMutation,
+    variables: { text: data.text }
+  }).then(resp => {
+    if (resp.data && !resp.data.createPost.error) {
+      const message = resp.data.createPost.message;
+      dispatch(postSuccess(message));
+    } else {
+      dispatch(postHasError(true));
+    }
+  })
+  .catch(err => {
+    dispatch(postHasError(true));
+  })
+  .finally(()=>{
+    dispatch(postIsLoading(false));
+  });
+};

@@ -16,6 +16,11 @@ export class PostsOut {
     message: string;
 }
 
+export class PostCreated {
+    id: string;
+    message: string;
+}
+
 export abstract class IQuery {
     abstract readPost(): PostsOut | Promise<PostsOut>;
 }
@@ -26,4 +31,6 @@ export abstract class IMutation {
     abstract editPost(): PostsOut | Promise<PostsOut>;
 
     abstract deletePost(): PostsOut | Promise<PostsOut>;
+
+    abstract createPost(text: string): PostCreated | Promise<PostCreated>;
 }

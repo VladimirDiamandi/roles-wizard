@@ -3,6 +3,7 @@ import { Button, Card, Alert, Space, Spin } from 'antd';
 import { connect } from 'react-redux';
 import { editPost, readPost, deletePost } from '../store/actions/posts.actions';
 import PropTypes from 'prop-types';
+import CreatePostForm from '../components/createPostForm';
 
 const MainPage = ({ editPost, successMessage, hasErrored, isLoading, deletePost, readPost  }) => {
   return (
@@ -18,6 +19,7 @@ const MainPage = ({ editPost, successMessage, hasErrored, isLoading, deletePost,
           <Button onClick={() => readPost()}>READ</Button>
           <Button onClick={() => deletePost()}>DELETE</Button>
           <Button onClick={() => editPost()}>EDIT</Button>
+          <CreatePostForm />
         </div>
         }
     </Card>
