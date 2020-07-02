@@ -1,13 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Form, Input, Button, Spin, Space, Alert, Card } from 'antd';
-import { createPost } from '../store/actions/posts.actions';
+import { createPost, getPosts } from '../store/actions/posts.actions';
 
 const CreatePostForm = ({createPostAction}) => {
 
   const onSubmit = values => {
-    console.log('values', values);
     createPostAction(values);
   };
   

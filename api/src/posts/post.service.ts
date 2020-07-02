@@ -23,4 +23,28 @@ export class PostService {
     post.user = user;
     return await this.postRepository.save(post);
   }
+
+  async getAll(userId: number): Promise<Posts[]> {
+    const user = await this.userRepository.findOne({id: userId});
+    return await this.postRepository.find({where: {user: user}}) || [];
+  }
+
+  async delete(id: number, userId: number): Promise<void> {
+    const post = await this.postRepository.findOne({id}, {relations: ['user']});
+    const user = await this.userRepository.findOne({id: userId});
+    if (post.user.id !== user.id) {
+      throw new Error('wrong user entity');
+    }
+    await this.postRepository.delete(id);
+  }
+
+  async edit(id: number, text:string, userId: number): Promise<Posts> {
+    const post = await this.postRepository.findOne({id}, {relations: ['user']});
+    const user = await this.userRepository.findOne({id: userId});
+    if (post.user.id !== user.id) {
+      throw new Error('wrong user entity');
+    }
+    post.text = text;
+    return await this.postRepository.save(post);
+  }
 }

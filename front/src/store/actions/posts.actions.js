@@ -25,23 +25,32 @@ export function postHasError(bool) {
   };
 }
 
-export const editPost = () => (dispatch) => {
+export const editPost = ({text, id}) => (dispatch, getState) => {
   dispatch(postIsLoading(true));
   dispatch(postHasError(false));
   dispatch(postSuccess(null));
   const postMutation = gql`
-      mutation {
-        editPost {
+      mutation editPost($text: String!, $id: Int!) {
+        editPost(text: $text, id: $id) {
           message
         }
       }
     `;
   client.mutate({
     mutation: postMutation,
+    variables: { id: parseInt(id), text }
   }).then(resp => {
     if (resp.data && !resp.data.editPost.error) {
       const message = resp.data.editPost.message;
       dispatch(postSuccess(message));
+      let posts = getState().posts;
+      posts = posts.map(post => {
+        if (post.id === id) {
+          post.text = text;
+        }
+        return post;
+      });
+      dispatch(setPosts(posts));
     } else {
       dispatch(postHasError(true));
     }
@@ -54,23 +63,36 @@ export const editPost = () => (dispatch) => {
   });
 };
 
-export const deletePost = () => (dispatch) => {
+const postMutation = gql`
+      mutation createPost($text: String!) {
+        createPost(text: $text) {
+          id
+          message
+        }
+      }
+    `;
+
+export const deletePost = (id) => (dispatch, getState) => {
   dispatch(postIsLoading(true));
   dispatch(postHasError(false));
   dispatch(postSuccess(null));
   const postMutation = gql`
-      mutation {
-        deletePost {
+      mutation deletePost($id: Int!) {
+        deletePost(id: $id) {
           message
         }
       }
     `;
   client.mutate({
     mutation: postMutation,
+    variables: { id: parseInt(id) }
   }).then(resp => {
     if (resp.data && !resp.data.deletePost.error) {
       const message = resp.data.deletePost.message;
       dispatch(postSuccess(message));
+      let posts = getState().posts;
+      posts = posts.filter(post => post.id !== id);
+      dispatch(setPosts(posts));
     } else {
       dispatch(postHasError(true));
     }
@@ -112,7 +134,7 @@ export const readPost = () => (dispatch, getState) => {
   });
 };
 
-export const createPost = (data) => (dispatch) => {
+export const createPost = ({text}) => (dispatch, getState) => {
   dispatch(postIsLoading(true));
   dispatch(postHasError(false));
   dispatch(postSuccess(null));
@@ -127,11 +149,57 @@ export const createPost = (data) => (dispatch) => {
 
   client.mutate({
     mutation: postMutation,
-    variables: { text: data.text }
+    variables: { text }
   }).then(resp => {
     if (resp.data && !resp.data.createPost.error) {
       const message = resp.data.createPost.message;
       dispatch(postSuccess(message));
+      let posts = getState().posts;
+      posts.push({
+        id: resp.data.createPost.id,
+        text
+      });
+      dispatch(setPosts(posts));
+    } else {
+      dispatch(postHasError(true));
+    }
+  })
+  .catch(err => {
+    dispatch(postHasError(true));
+  })
+  .finally(()=>{
+    dispatch(postIsLoading(false));
+  });
+};
+
+export const POSTS_DATA = 'POST_DATA';
+export function setPosts(posts) {
+  return {
+    type: POSTS_DATA,
+    posts: posts
+  };
+}
+
+export const getPosts = () => (dispatch) => {
+  dispatch(postIsLoading(true));
+  dispatch(postHasError(false));
+  dispatch(postSuccess(null));
+  const postQuery = gql`
+      query {
+        getPosts {
+          id
+          text
+        }
+      }
+    `;
+  client.query({
+    query: postQuery,
+    fetchPolicy: "network-only",
+  }).then(resp => {
+    if (resp.data && resp.data.getPosts) {
+      const posts = resp.data.getPosts;
+      dispatch(postSuccess('Fetch fresh posts'));
+      dispatch(setPosts(posts));
     } else {
       dispatch(postHasError(true));
     }

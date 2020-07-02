@@ -12,6 +12,11 @@ type PostsOut {
   message: String!
 }
 
+type PostOut {
+  id: String!
+  text: String!
+}
+
 type PostCreated {
   id: String!
   message: String!
@@ -19,11 +24,12 @@ type PostCreated {
 
 type Query {
   readPost: PostsOut!
+  getPosts: [PostOut!]!
 }
 
 type Mutation {
   login(password: String!, email: String!): LoginOut!
-  editPost: PostsOut!
-  deletePost: PostsOut!
+  editPost(id: Int!, text: String!): PostsOut!
+  deletePost(id: Int!): PostsOut!
   createPost(text: String!): PostCreated!
 }
