@@ -1,10 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Button, Card, Alert, Space, Spin } from 'antd';
 import { connect } from 'react-redux';
-import { editPost, readPost, deletePost } from '../store/actions/posts.actions';
 import PropTypes from 'prop-types';
+import CreatePostForm from '../components/createPostForm';
+import PostsList from '../components/postsList';
+import { getPosts } from '../store/actions/posts.actions';
 
-const MainPage = ({ editPost, successMessage, hasErrored, isLoading, deletePost, readPost  }) => {
+const MainPage = ({ successMessage, hasErrored, isLoading, getPostsAction }) => {
+
+  useEffect(getPostsAction, []);
+
   return (
     <Card title="Post actions">
         { hasErrored && <Alert message="Posts Error: access forbiden" type="error" /> }
@@ -15,9 +20,8 @@ const MainPage = ({ editPost, successMessage, hasErrored, isLoading, deletePost,
         </Space>
         :
         <div>
-          <Button onClick={() => readPost()}>READ</Button>
-          <Button onClick={() => deletePost()}>DELETE</Button>
-          <Button onClick={() => editPost()}>EDIT</Button>
+          <CreatePostForm />
+          <PostsList />
         </div>
         }
     </Card>
@@ -34,9 +38,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    deletePost: () => dispatch(deletePost()),
-    readPost: () => dispatch(readPost()),
-    editPost: () => dispatch(editPost()),
+    getPostsAction: () => dispatch(getPosts()),
   };
 };
 
@@ -44,9 +46,7 @@ MainPage.propTypes = {
   successMessage: PropTypes.string,
   hasErrored: PropTypes.bool.isRequired,
   isLoading: PropTypes.bool.isRequired,
-  deletePost: PropTypes.func.isRequired,
-  readPost: PropTypes.func.isRequired,
-  editPost: PropTypes.func.isRequired,
+  getPostsAction: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainPage);

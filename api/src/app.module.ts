@@ -12,7 +12,6 @@ import { PostService } from './posts/post.service';
 import { ConfigModule } from './config/config.module';
 import { ConfigService } from './config/config.service';
 import { DatabaseModule } from './database/database.module';
-import { AuthMiddleware } from './middleware/auth.middleware';
 import { GraphQLModule } from '@nestjs/graphql';
 import { join } from 'path';
 import { LoginResolver } from './users/login.resolver';
@@ -50,10 +49,4 @@ const batabaseUrl = config.get('DB_URL') + ':' + config.get('DB_PORT') + '/' + c
 	],
 })
 
-export class AppModule implements NestModule{
-	configure(consumer: MiddlewareConsumer) {
-	  consumer
-		.apply(AuthMiddleware)
-		.forRoutes({ path: 'posts/', method: RequestMethod.ALL });
-	}
-}
+export class AppModule {}
