@@ -1,6 +1,5 @@
-import axios from 'axios';
-
-const apiUrl = '/api';
+import { gql } from 'apollo-boost';
+import { client } from '../../graphql/graphql.client';
 
 export const POSTS_PENDING = 'POST_PENDING';
 export function postIsLoading(bool) {
@@ -26,86 +25,89 @@ export function postHasError(bool) {
   };
 }
 
-export const editPost = () => (dispatch, getState) => {
-  const { token } = getState();
-    dispatch(postIsLoading(true));
-    dispatch(postHasError(false));
-    dispatch(postSuccess(null));
-    
-    axios.post(apiUrl + '/posts', {} ,
-        {headers: {
-            "Authorization" : token
-          }
+export const editPost = () => (dispatch) => {
+  dispatch(postIsLoading(true));
+  dispatch(postHasError(false));
+  dispatch(postSuccess(null));
+  const postMutation = gql`
+      mutation {
+        editPost {
+          message
         }
-    )
-    .then(resp => {
-      if (resp.data && !resp.data.error) {
-        const message = resp.data.message;
-        dispatch(postSuccess(message));
-      } else {
-        dispatch(postHasError(true));
       }
-    })
-    .catch(err => {
+    `;
+  client.mutate({
+    mutation: postMutation,
+  }).then(resp => {
+    if (resp.data && !resp.data.editPost.error) {
+      const message = resp.data.editPost.message;
+      dispatch(postSuccess(message));
+    } else {
       dispatch(postHasError(true));
-    })
-    .finally(()=>{
-      dispatch(postIsLoading(false));
-    });
+    }
+  })
+  .catch(err => {
+    dispatch(postHasError(true));
+  })
+  .finally(()=>{
+    dispatch(postIsLoading(false));
+  });
 };
 
-export const deletePost = () => (dispatch, getState) => {
-  const { token } = getState();
-    dispatch(postIsLoading(true));
-    dispatch(postHasError(false));
-    dispatch(postSuccess(null));
-    
-    axios.delete(apiUrl + '/posts',
-        {headers: {
-            "Authorization" : token
-          }
+export const deletePost = () => (dispatch) => {
+  dispatch(postIsLoading(true));
+  dispatch(postHasError(false));
+  dispatch(postSuccess(null));
+  const postMutation = gql`
+      mutation {
+        deletePost {
+          message
         }
-    )
-    .then(resp => {
-      if (resp.data && !resp.data.error) {
-        const message = resp.data.message;
-        dispatch(postSuccess(message));
-      } else {
-        dispatch(postHasError(true));
       }
-    })
-    .catch(err => {
+    `;
+  client.mutate({
+    mutation: postMutation,
+  }).then(resp => {
+    if (resp.data && !resp.data.deletePost.error) {
+      const message = resp.data.deletePost.message;
+      dispatch(postSuccess(message));
+    } else {
       dispatch(postHasError(true));
-    })
-    .finally(()=>{
-      dispatch(postIsLoading(false));
-    });
+    }
+  })
+  .catch(err => {
+    dispatch(postHasError(true));
+  })
+  .finally(()=>{
+    dispatch(postIsLoading(false));
+  });
 };
 
 export const readPost = () => (dispatch, getState) => {
-  const { token } = getState();
-    dispatch(postIsLoading(true));
-    dispatch(postHasError(false));
-    dispatch(postSuccess(null));
-    
-    axios.get(apiUrl + '/posts',
-        {headers: {
-            "Authorization" : token
-          }
+  dispatch(postIsLoading(true));
+  dispatch(postHasError(false));
+  dispatch(postSuccess(null));
+  const postQuery = gql`
+      query {
+        readPost {
+          message
         }
-    )
-    .then(resp => {
-      if (resp.data && !resp.data.error) {
-        const message = resp.data.message;
-        dispatch(postSuccess(message));
-      } else {
-        dispatch(postHasError(true));
       }
-    })
-    .catch(err => {
+    `;
+  client.query({
+    query: postQuery,
+  }).then(resp => {
+    if (resp.data && !resp.data.readPost.error) {
+      const message = resp.data.readPost.message;
+      dispatch(postSuccess(message));
+    } else {
       dispatch(postHasError(true));
-    })
-    .finally(()=>{
-      dispatch(postIsLoading(false));
-    });
+    }
+  })
+  .catch(err => {
+    dispatch(postHasError(true));
+  })
+  .finally(()=>{
+    dispatch(postIsLoading(false));
+  });
 };

@@ -5,6 +5,7 @@ import { AuthService } from '../users/auth.service';
 import { User } from '../schemas/user.entity';
 import { Role } from '../schemas/role.entity';
 import { Reflector } from '@nestjs/core';
+import { GqlExecutionContext } from '@nestjs/graphql';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
@@ -18,13 +19,13 @@ export class RolesGuard implements CanActivate {
     private reflector: Reflector
   ) {}
 
-  canActivate(
+  async canActivate(
     context: ExecutionContext,
-  ): boolean | Promise<boolean> | Observable<boolean> {
-    const request = context.switchToHttp().getRequest();
+  ): Promise<boolean> {
+    const ctx = GqlExecutionContext.create(context);
+    const { req } = ctx.getContext();
     const roles = this.reflector.get<string[]>('roles', context.getHandler());
-    console.log('ROLES', roles);
-    return this.validateRequest(request, roles);
+    return await this.validateRequest(req, roles);
   }
 
   async validateRequest(req, roles) {
