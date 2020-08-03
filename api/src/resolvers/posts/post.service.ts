@@ -1,7 +1,7 @@
 import { Injectable, Inject, Post } from '@nestjs/common';
 import { Repository, getConnection } from 'typeorm';
-import { User } from '../schemas/user.entity';
-import { Posts } from '../schemas/post.entity';
+import { User } from '../../schemas/user.entity';
+import { Posts } from '../../schemas/post.entity';
 
 @Injectable()
 export class PostService {
