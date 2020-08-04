@@ -7,8 +7,8 @@ services:
       dockerfile: api.Dockerfile
     networks:
       - app-network
-    expose:
-      - "3005"
+    # expose:
+    #   - "3005"
     # ports:
     #   - 3005:3005
     volumes:
@@ -38,16 +38,27 @@ services:
     networks:
       - app-network
 
-  front:
+  # front:
+  #   build:
+  #     context: .
+  #     dockerfile: front.Dockerfile
+  #   networks:
+  #     - app-network
+  #   expose:
+  #     - "3000"
+  #   volumes:
+  #   - ./front:/home/front
+
+  vue:
     build:
       context: .
-      dockerfile: front.Dockerfile
+      dockerfile: vue.Dockerfile
     networks:
       - app-network
-    expose:
-      - "3000"
     volumes:
-    - ./front:/home/front
+    - ./vue:/home/vue
+    command:
+      bash -c "npm i && npm run serve"
 
   web:
     image: nginx:mainline-alpine
@@ -58,7 +69,8 @@ services:
       
     depends_on:
       - api
-      - front
+      # - front
+      - vue
     networks:
       - app-network
     
@@ -66,6 +78,7 @@ volumes:
   app: {}
   front: {}
   db-data: {}
+  vue: {}
 
 networks:
   app-network:
