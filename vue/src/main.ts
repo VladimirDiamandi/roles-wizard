@@ -3,7 +3,7 @@ import App from "./App.vue";
 import router from "./router";
 import vuetify from "./plugins/vuetify";
 import VueApollo from "vue-apollo";
-import { apolloClient } from "../utils/graphql.client";
+import { apolloClient } from "@/utils/graphql.client";
 
 Vue.use(VueApollo);
 Vue.config.productionTip = false;

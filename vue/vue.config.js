@@ -1,3 +1,14 @@
 module.exports = {
-  transpileDependencies: ["vuetify"]
+  transpileDependencies: ["vuetify"],
+  configureWebpack: {
+    module: {
+      rules: [
+        {
+          test: /.html$/,
+          loader: "vue-template-loader",
+          exclude: /index.html/
+        }
+      ]
+    }
+  }
 };

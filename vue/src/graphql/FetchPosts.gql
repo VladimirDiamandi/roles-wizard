@@ -1,6 +1,0 @@
-query {
-  getPosts {
-    id
-    text
-  }
-}
