@@ -2,12 +2,12 @@ import { SetMetadata, UseGuards, Inject} from '@nestjs/common';
 import { Resolver, Query, Mutation, Args, Context, Int } from "@nestjs/graphql";
 import * as _ from 'lodash';
 
-import { RolesGuard } from '../guards/roles.guard';
-import { PostsOut } from '../dto/posts.out.dto';
-import { PostOut } from '../dto/post.out.dto';
-import { PostCreated } from '../dto/post.create.out.dto';
+import { RolesGuard } from '../../guards/roles.guard';
+import { PostsOut } from './dto/posts.out.dto';
+import { PostOut } from './dto/post.out.dto';
+import { PostCreated } from './dto/post.create.out.dto';
 import { PostService } from './post.service';
-import { JwtGuard } from '../guards/jwt.guard';
+import { JwtGuard } from '../../guards/jwt.guard';
 
 @Resolver('Posts')
 @UseGuards(JwtGuard)

@@ -2,12 +2,6 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type LoginOut {
-  message: String
-  error: String
-  token: String
-}
-
 type PostsOut {
   message: String!
 }
@@ -22,14 +16,20 @@ type PostCreated {
   message: String!
 }
 
+type LoginOut {
+  message: String
+  error: String
+  token: String
+}
+
 type Query {
   readPost: PostsOut!
   getPosts: [PostOut!]!
 }
 
 type Mutation {
-  login(password: String!, email: String!): LoginOut!
   editPost(id: Int!, text: String!): PostsOut!
   deletePost(id: Int!): PostsOut!
   createPost(text: String!): PostCreated!
+  login(password: String!, email: String!): LoginOut!
 }

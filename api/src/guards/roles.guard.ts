@@ -1,7 +1,7 @@
 import { Injectable, CanActivate, ExecutionContext, Inject } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { Repository } from 'typeorm';
-import { AuthService } from '../users/auth.service';
+import { AuthService } from '../services/auth.service';
 import { User } from '../schemas/user.entity';
 import { Role } from '../schemas/role.entity';
 import { Reflector } from '@nestjs/core';

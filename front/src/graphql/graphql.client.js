@@ -12,4 +12,3 @@ export const client = new ApolloClient({
     return 'http://localhost:88/graphql';
   },
 });
-

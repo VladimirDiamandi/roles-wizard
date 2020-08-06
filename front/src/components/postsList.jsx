@@ -31,11 +31,11 @@ const PostsList = ({posts, deletePostAction, editPostAction}) => {
   );
 };
 
-const mapStateToProps = (state) => {
-  return {
-    posts: state.posts
-  };
-};
+// const mapStateToProps = (state) => {
+//   return {
+//     posts: state.posts
+//   };
+// };
 
 const mapDispatchToProps = (dispatch) => {
   return {
@@ -50,4 +50,4 @@ PostsList.propTypes = {
   editPostAction: PropTypes.func.isRequired,
 };
   
-export default connect(mapStateToProps, mapDispatchToProps)(PostsList);
+export default connect(null, mapDispatchToProps)(PostsList);
