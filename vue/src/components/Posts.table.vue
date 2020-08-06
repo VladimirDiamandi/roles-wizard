@@ -1,6 +1,11 @@
 <template>
   <ApolloQuery
-    :query="gql => gql`${fetchPostsGql}`"
+    :query="
+      gql =>
+        gql`
+          ${fetchPostsGql}
+        `
+    "
   >
     <template slot-scope="{ result: { loading, error, data } }">
       <!-- Loading -->
@@ -18,13 +23,14 @@
           hide-default-footer
         >
           <template v-slot:item.id="props">
-            {{props.item.id}}
+            {{ props.item.id }}
           </template>
           <template v-slot:item.text="props">
             <v-edit-dialog
               :return-value.sync="props.item.text"
               @save="handleSave(props.item)"
-            > {{ props.item.text }}
+            >
+              {{ props.item.text }}
               <template v-slot:input>
                 <v-text-field
                   v-model="props.item.text"
@@ -36,7 +42,9 @@
             </v-edit-dialog>
           </template>
           <template v-slot:item.actions="props">
-            <v-btn @click.prevent="handleDelete(props.item.id)" color="red"> DELETE </v-btn>
+            <v-btn @click.prevent="handleDelete(props.item.id)" color="red">
+              DELETE
+            </v-btn>
           </template>
         </v-data-table>
       </div>
@@ -52,7 +60,7 @@ import { Component, Vue } from "vue-property-decorator";
 import EDIT_POST from "@/graphql/EditPost";
 import FETCH_POSTS from "@/graphql/FetchPosts";
 import DELETE_POST from "@/graphql/DeletePost";
-import { EventBus } from '@/utils/event-bus';
+import { EventBus } from "@/utils/event-bus";
 import gql from "graphql-tag";
 
 interface TableHeader {
@@ -67,11 +75,11 @@ interface SaveRequest {
 
 @Component({
   apollo: {
-    getPosts: gql(FETCH_POSTS),
+    getPosts: gql(FETCH_POSTS)
   }
 })
 export default class PostsTable extends Vue {
-  private headers:Array<TableHeader> = [
+  private headers: Array<TableHeader> = [
     {
       text: "Id",
       value: "id"
@@ -83,49 +91,49 @@ export default class PostsTable extends Vue {
     {
       text: "Actions",
       value: "actions"
-    },
+    }
   ];
 
   private fetchPostsGql = FETCH_POSTS;
 
   handleSave(data: SaveRequest) {
-    const {id, text} = data;
+    const { id, text } = data;
     this.$apollo.mutate({
       mutation: gql(EDIT_POST),
       variables: {
         id: parseInt(id),
-        text,
+        text
       },
       update: () => {
         this.refreshFetch();
       }
     });
-  };
+  }
 
   handleDelete(id: string) {
     this.$apollo.mutate({
       mutation: gql(DELETE_POST),
       variables: {
-        id: parseInt(id),
+        id: parseInt(id)
       },
       update: () => {
         this.refreshFetch();
       }
     });
-  };
+  }
 
   refreshFetch() {
     this.$apollo.queries.getPosts.refetch();
   }
 
-  mounted()  {
-    EventBus.$on('post-created', () => {
+  mounted() {
+    EventBus.$on("post-created", () => {
       this.refreshFetch();
     });
   }
 
   beforeDestroy() {
-    EventBus.$off('post-created');
+    EventBus.$off("post-created");
   }
 }
 </script>

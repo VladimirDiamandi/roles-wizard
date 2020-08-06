@@ -7,10 +7,6 @@ services:
       dockerfile: api.Dockerfile
     networks:
       - app-network
-    # expose:
-    #   - "3005"
-    # ports:
-    #   - 3005:3005
     volumes:
     - ./api:/home/api
     depends_on:
@@ -38,16 +34,14 @@ services:
     networks:
       - app-network
 
-  # front:
-  #   build:
-  #     context: .
-  #     dockerfile: front.Dockerfile
-  #   networks:
-  #     - app-network
-  #   expose:
-  #     - "3000"
-  #   volumes:
-  #   - ./front:/home/front
+  front:
+    build:
+      context: .
+      dockerfile: front.Dockerfile
+    networks:
+      - app-network
+    volumes:
+    - ./front:/home/front
 
   vue:
     build:
@@ -69,7 +63,7 @@ services:
       
     depends_on:
       - api
-      # - front
+      - front
       - vue
     networks:
       - app-network

@@ -10,8 +10,8 @@ const env = loadEnv([
 module.exports = {
   client: {
     service: {
-      name: 'api',
-      url: 'http://localhost:88/graphql',
+      name: "api",
+      url: "http://localhost:88/graphql"
     },
     includes: ["src/**/*.{js,jsx,ts,tsx,vue,gql}"]
   },

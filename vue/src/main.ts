@@ -9,7 +9,7 @@ Vue.use(VueApollo);
 Vue.config.productionTip = false;
 
 const apolloProvider = new VueApollo({
-  defaultClient: apolloClient,
+  defaultClient: apolloClient
 });
 
 new Vue({

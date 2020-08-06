@@ -1,27 +1,23 @@
 <template>
   <v-container>
-  <ApolloMutation
-    :mutation="require('@/graphql/Login.gql')"
-    :variables="{
-      email,
-      password
-    }"
-    class="form"
-    @done="handleLogin"
-  ><template slot-scope="{ mutate }">
-    <v-text-field
-      v-model="email"
-      label="Email"
-      type="email"
-    ></v-text-field>
-    <v-text-field
-      v-model="password"
-      label="Password"
-      type="password"
-    ></v-text-field>
-    <v-btn color="success" @click="mutate()">Login</v-btn>
-  </template>
-  </ApolloMutation>
+    <ApolloMutation
+      :mutation="require('@/graphql/Login.gql')"
+      :variables="{
+        email,
+        password
+      }"
+      class="form"
+      @done="handleLogin"
+      ><template slot-scope="{ mutate }">
+        <v-text-field v-model="email" label="Email" type="email"></v-text-field>
+        <v-text-field
+          v-model="password"
+          label="Password"
+          type="password"
+        ></v-text-field>
+        <v-btn color="success" @click="mutate()">Login</v-btn>
+      </template>
+    </ApolloMutation>
   </v-container>
 </template>
 
@@ -37,13 +33,11 @@ interface LoginResponse {
   data?: {
     login: {
       token: string;
-    }
-  }
+    };
+  };
 }
 
-@Component({
-  
-})
+@Component({})
 export default class Login extends Vue {
   private email = "";
   private password = "";
@@ -54,7 +48,7 @@ export default class Login extends Vue {
     const token = _.get(data, "data.login.token");
     if (token) {
       window.localStorage.setItem("token", token);
-      router.push({name: "Home"});
+      router.push({ name: "Home" });
     }
   }
 }
